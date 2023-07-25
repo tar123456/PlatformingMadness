@@ -12,9 +12,11 @@ public class PlayerAttackScript : MonoBehaviour
 
    
     public GameObject projectile;
+    Animator animator;
     
     void Start()
     {
+        animator = GetComponent<Animator>();
         
     }
 
@@ -29,8 +31,10 @@ public class PlayerAttackScript : MonoBehaviour
 
            Instantiate(projectile, spawner.position,transform.rotation);
             
+            
   
         }
+        animator.SetBool("attack",attacking);
         
     }
 
