@@ -893,9 +893,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   attackCooldown: 2
+  attackTimer: 0
   attackRange: 10
   projectile: {fileID: 6957633293176134339, guid: fde01a5a98ae5be42a9a79403519a351, type: 3}
   spawnPosition: {fileID: 4007466933409971280}
+  patrolPoint1: -2
+  patrolPoint2: 2
+  patrolSpeed: 2
 --- !u!61 &8088455001562855784
 BoxCollider2D:
   m_ObjectHideFlags: 0

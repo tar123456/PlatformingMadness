@@ -6,73 +6,71 @@ public class EnemyScript : MonoBehaviour
 {
     public float maxHealth = 3.0f;
     private float currentHealth;
-
     private Animator animator;
     private GameObject player;
-    private bool isAttacking = false;
-
-    
     public float attackCooldown = 2.0f;
-    private float attackTimer = 0.0f;
-
-    
+    public float attackTimer = 0.0f;
     public float attackRange = 20.0f;
-
     public GameObject projectile;
-
     public Transform spawnPosition;
+    IBaseState _baseState;
+    public PatrolingState patrolingState = new PatrolingState();
+    public AttackState attackState = new AttackState();
+    public DeadState DeadState = new DeadState();
+    public float patrolPoint1;
+    public float patrolPoint2;
+    public float patrolSpeed = 2.0f;
+   
 
-    public Transform[] waypoints;
-    
 
-    
+
+
     void Start()
     {
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         currentHealth = maxHealth;
+
+        _baseState = patrolingState;
+        _baseState.enter(this,animator);
     }
 
     
     void Update()
     {
-        if (!isAttacking && CanAttackPlayer())
-        {
-            
-            StartCoroutine(Attack());
-            
-        }
-
-        
+       
+        _baseState.update(this, player.transform, currentHealth, animator);
+         
         attackTimer += Time.deltaTime;
     }
 
-    private bool CanAttackPlayer()
+
+
+    public void changeState(IBaseState baseState)
     {
-        
-        return (Vector2.Distance(transform.position, player.transform.position) <= attackRange && attackTimer >= attackCooldown);
+        _baseState = baseState;
+        _baseState.enter(this,animator);
     }
 
-    private IEnumerator Attack()
+    public void shootProjectile()
     {
-        isAttacking = true;
         animator.SetBool("Attack", true);
-
-        yield return new WaitForSeconds(0.1f);
-
-        Instantiate(projectile, spawnPosition.position, transform.rotation);
-
-        yield return new WaitForSeconds(0.1f);
-
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-       
-
-        animator.SetBool("Attack", false);
-        isAttacking = false;
-
-        
-        attackTimer = 0.0f;
+        if (attackTimer >= attackCooldown)
+        {
+            
+            Instantiate(projectile, spawnPosition.position, spawnPosition.rotation);
+            attackTimer = 0.0f;
+        }
     }
+
+    public delegate IEnumerator Attack(EnemyScript enemyScript, Animator animator);
+
+    public void InitiateAttack(Attack attack,EnemyScript enemyScript,Animator animator)
+    {
+        StartCoroutine(attack(enemyScript,animator));
+    }
+
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -80,15 +78,11 @@ public class EnemyScript : MonoBehaviour
         {
             currentHealth--;
 
-            if (currentHealth <= 0)
+            if (currentHealth > 0)
             {
-                animator.SetBool("Die", true);
-                Destroy(gameObject, 1.0f); 
-            }
-            else
-            {
+
                 StartCoroutine(PlayHitAnimation());
-            }
+            }   
         }
     }
 
@@ -97,5 +91,15 @@ public class EnemyScript : MonoBehaviour
         animator.SetBool("Hit", true);
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
         animator.SetBool("Hit", false);
+    }
+
+    public void destroySelf()
+    {
+        Destroy(gameObject, 1.0f);
+    }
+    public bool flipCharacter(bool characterFlipped)
+    {
+        transform.Rotate(0f, 180f, 0f);
+        return !characterFlipped;
     }
 }
