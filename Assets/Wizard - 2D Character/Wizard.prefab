@@ -131,7 +131,7 @@ Transform:
   m_GameObject: {fileID: 437127690167514086}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.33, y: 3.01, z: 0}
+  m_LocalPosition: {x: 1.99, y: 3.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1403,9 +1403,10 @@ GameObject:
   - component: {fileID: 4964482894061926252}
   - component: {fileID: 6206949065329481397}
   - component: {fileID: 7064008151110467821}
+  - component: {fileID: 734601204857704130}
   m_Layer: 0
   m_Name: Wizard
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1539,6 +1540,20 @@ MonoBehaviour:
   movementSpeed: 50
   spawner: {fileID: 3563769430095358128}
   projectile: {fileID: 6957633293176134339, guid: 7b0a4dffad041174dbc18b109b65cfa7, type: 3}
+--- !u!114 &734601204857704130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4437130512077450545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 280b2769570cefc458d1e2567d5ecc08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 4
+  CurrentHealth: 3
 --- !u!1 &4836615650526928268
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,52 +12,56 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rigidbody2D;
     bool isGrounded;
     bool isFacingRight = true;
+    PlayerHealthManager healthManager;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         rigidbody2D =   GetComponent<Rigidbody2D>();
         isGrounded = true;
+        healthManager = GetComponent<PlayerHealthManager>();
     }
 
     void Update()
     {
-        #region movement
-        float movementAxis = InputManager.inputManager.movementInput();
-
-        Vector2 movementForce = new Vector2(movementAxis * speed, rigidbody2D.velocity.y);
-        rigidbody2D.velocity = movementForce;
-        bool ismoving = movementAxis > 0||movementAxis<0;
-        animator.SetBool("isRun",ismoving&&isGrounded);
-
-        if (movementAxis < 0 && isFacingRight)
+        if (healthManager.CurrentHealth > 0)
         {
-            flipCharacter();
+            #region movement
+            float movementAxis = InputManager.inputManager.movementInput();
+
+            Vector2 movementForce = new Vector2(movementAxis * speed, rigidbody2D.velocity.y);
+            rigidbody2D.velocity = movementForce;
+            bool ismoving = movementAxis > 0 || movementAxis < 0;
+            animator.SetBool("isRun", ismoving && isGrounded);
+
+            if (movementAxis < 0 && isFacingRight)
+            {
+                flipCharacter();
+            }
+            else if (movementAxis > 0 && !isFacingRight)
+            {
+                flipCharacter();
+            }
+
+
+
+            #endregion
+
+            #region jump
+
+            float jumping = InputManager.inputManager.jumpInput();
+            if (isGrounded && jumping > 0)
+            {
+                rigidbody2D.AddForce(Vector3.up * forceAmt, ForceMode2D.Impulse);
+                isGrounded = false;
+
+
+            }
+            animator.SetBool("isJump", !isGrounded);
+
+            #endregion
+
         }
-        else if (movementAxis > 0 && !isFacingRight)
-        {
-            flipCharacter();
-        }
-
-        
-
-        #endregion
-
-        #region jump
-
-        float jumping = InputManager.inputManager.jumpInput();
-        if (isGrounded && jumping>0)
-        {
-            rigidbody2D.AddForce(Vector3.up * forceAmt, ForceMode2D.Impulse);
-            isGrounded = false;
-            
-           
-        }
-        animator.SetBool("isJump", !isGrounded);
-
-        #endregion
-
- 
 
 
     }
@@ -71,8 +75,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+
+        if (collision.gameObject.layer == 6)
+        {
             isGrounded = true;
+        }
         
     }
 }
