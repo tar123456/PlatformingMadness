@@ -1489,7 +1489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  forceAmt: 4
+  forceAmt: 8
 --- !u!70 &6206949065329481397
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1552,8 +1552,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 280b2769570cefc458d1e2567d5ecc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 4
+  MaxHealth: 10
   CurrentHealth: 3
+  healthBar: {fileID: 0}
 --- !u!1 &4836615650526928268
 GameObject:
   m_ObjectHideFlags: 0
