@@ -9,6 +9,10 @@ public class GameOverScript : MonoBehaviour
     {
         gameObject.SetActive(true);
     }
+    public void showWinScreen()
+    {
+        gameObject.SetActive(true);
+    }
     public void restartLevel()
     {
         Time.timeScale = 1;
