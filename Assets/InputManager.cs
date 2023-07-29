@@ -44,4 +44,14 @@ public class InputManager : MonoBehaviour
       
     }
 
+    public bool pauseResume()
+    {
+        bool pausePressed = Input.GetButton("Cancel");
+        Debug.Log("input pressed " + pausePressed);
+        
+
+      return pausePressed;
+        
+    }    
+
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ProjectileScript : MonoBehaviour
 {
     float delay;
-    public float movementSpeed = 50;
+    public float movementSpeed = 20;
 
     // Start is called before the first frame update
     void Start()

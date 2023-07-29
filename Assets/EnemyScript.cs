@@ -20,6 +20,7 @@ public class EnemyScript : MonoBehaviour
     public float patrolPoint1;
     public float patrolPoint2;
     public float patrolSpeed = 2.0f;
+    public Transform eyetransform;
    
 
 
@@ -77,7 +78,7 @@ public class EnemyScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Projectile"))
         {
             currentHealth--;
-
+            FindObjectOfType<AudioManager>().play("Enemy Hurt");
             if (currentHealth > 0)
             {
 

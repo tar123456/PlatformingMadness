@@ -5,22 +5,51 @@ using UnityEngine;
 
 public class AttackState : IBaseState
 {
+    bool isAttacking;
     public void enter(EnemyScript enemyScript, Animator animator)
     {
         animator.SetBool("Move", false);
+        isAttacking = false;
+
     }
 
     public void update(EnemyScript enemyScript, Transform playerTransform, float currentHealth, Animator animator)
     {
-        
-        enemyScript.InitiateAttack(Attack,enemyScript,animator);
-        
-
-        //Transition to Patrol
-        if (Vector2.Distance(enemyScript.transform.position, playerTransform.transform.position) > enemyScript.attackRange || enemyScript.attackTimer > enemyScript.attackCooldown)
+        int playerLayerMask = LayerMask.GetMask("Player");
+        RaycastHit2D hit = Physics2D.Raycast(enemyScript.eyetransform.position, enemyScript.eyetransform.right, enemyScript.attackRange+1f, playerLayerMask);
+        Debug.DrawRay(enemyScript.eyetransform.position, enemyScript.eyetransform.right * enemyScript.attackRange, Color.red);
+        Debug.Log(hit.collider != null ? hit.collider : "no hit");
+        if (hit.collider == null)
         {
+            
+            // If the player is not within attack range, transition back to patrolling state
             enemyScript.changeState(enemyScript.patrolingState);
+            
         }
+
+        else
+        {
+            
+            float distanceToPlayer = Vector2.Distance(hit.point, enemyScript.eyetransform.position);
+            if (distanceToPlayer <= enemyScript.attackRange)
+            {
+               
+                isAttacking = true;
+            }
+           
+            
+        }
+
+        if (isAttacking)
+        {
+            enemyScript.InitiateAttack(Attack, enemyScript, animator);
+        }
+       
+
+
+
+
+
         //Transition to dead
         if (currentHealth <= 0)
         {

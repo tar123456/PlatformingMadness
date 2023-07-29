@@ -11,7 +11,14 @@ public class GameOverScript : MonoBehaviour
     }
     public void restartLevel()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene("SampleScene");
+    }
+
+    public void gotoMainMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MainMenuScene");
     }
 
     public void quitGame()

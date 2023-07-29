@@ -6,12 +6,15 @@ public class PlayerHealthManager : MonoBehaviour
     Animator animator;
     public HealthBar healthBar;
     public GameOverScript gameOverScript;
+  
     
     void Start()
     {
         CurrentHealth = MaxHealth;
         animator = GetComponent<Animator>();
         healthBar.SetMaxHealth(MaxHealth);
+      
+        
     }
 
     // Update is called once per frame
@@ -26,15 +29,18 @@ public class PlayerHealthManager : MonoBehaviour
         {
             
             CurrentHealth--;
+            
             healthBar.setHealth(CurrentHealth);
             if (CurrentHealth <= 0)
             {
-
+                FindObjectOfType<AudioManager>().play("Player Hurt");
                 animator.SetBool("die", true);
                 gameOverScript.showGameOverScreen();
+                Time.timeScale = 0;
             }
             else
             {
+                FindObjectOfType<AudioManager>().play("Player Hurt");
                 animator.SetBool("hurt",true);
             }
         }

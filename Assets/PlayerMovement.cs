@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-
+    
     public float speed;
     Animator animator;
     public float forceAmt;
@@ -13,55 +13,71 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded;
     bool isFacingRight = true;
     PlayerHealthManager healthManager;
+    bool paused;
+   
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        rigidbody2D =   GetComponent<Rigidbody2D>();
+        
         isGrounded = true;
         healthManager = GetComponent<PlayerHealthManager>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        paused = false;
+       
+     
     }
-
+   
     void Update()
     {
-        if (healthManager.CurrentHealth > 0)
-        {
-            #region movement
-            float movementAxis = InputManager.inputManager.movementInput();
-
-            Vector2 movementForce = new Vector2(movementAxis * speed, rigidbody2D.velocity.y);
-            rigidbody2D.velocity = movementForce;
-            bool ismoving = movementAxis > 0 || movementAxis < 0;
-            animator.SetBool("isRun", ismoving && isGrounded);
-
-            if (movementAxis < 0 && isFacingRight)
+        paused = InputManager.inputManager.pauseResume();
+        
+        
+            if (healthManager.CurrentHealth > 0)
             {
-                flipCharacter();
-            }
-            else if (movementAxis > 0 && !isFacingRight)
-            {
-                flipCharacter();
-            }
+                #region movement
+                float movementAxis = InputManager.inputManager.movementInput();
+
+                Vector2 movementForce = new Vector2(movementAxis * speed, rigidbody2D.velocity.y);
+                rigidbody2D.velocity = movementForce;
+                bool ismoving = movementAxis > 0 || movementAxis < 0;
+                animator.SetBool("isRun", ismoving && isGrounded);
+
+                if (movementAxis < 0 && isFacingRight)
+                {
+                    flipCharacter();
+                }
+                else if (movementAxis > 0 && !isFacingRight)
+                {
+                    flipCharacter();
+                }
 
 
 
             #endregion
 
-            #region jump
+                #region jump
 
-            float jumping = InputManager.inputManager.jumpInput();
-            if (isGrounded && jumping > 0)
+            if (Time.timeScale > 0)
             {
-                rigidbody2D.AddForce(Vector3.up * forceAmt, ForceMode2D.Impulse);
-                isGrounded = false;
+                float jumping = InputManager.inputManager.jumpInput();
+               
+                if (isGrounded && jumping > 0)
+                {
+                    rigidbody2D.AddForce(Vector3.up * forceAmt, ForceMode2D.Impulse);
+                    isGrounded = false;
+                    FindObjectOfType<AudioManager>().play("Jump");
+                    
 
+                }
+                animator.SetBool("isJump", !isGrounded);
+              
+            }
+                #endregion
 
             }
-            animator.SetBool("isJump", !isGrounded);
-
-            #endregion
-
-        }
+        
+        
 
 
     }

@@ -16,6 +16,7 @@ public class PlayerAttackScript : MonoBehaviour
     Animator animator;
     float delay =0;
     
+    
     bool attacking = false;
     
     void Start()
@@ -35,6 +36,8 @@ public class PlayerAttackScript : MonoBehaviour
 
                 delay += Time.deltaTime;
 
+            if (Time.timeScale >0)
+            {
                 animator.SetBool("attack", attacking);
 
                 if (attacking && delay >= 0.1)
@@ -42,12 +45,12 @@ public class PlayerAttackScript : MonoBehaviour
 
                     Instantiate(projectile, spawner.position, transform.rotation);
                     delay = 0;
-                    
+
 
 
                 }
-                
-            
+
+            }
           
         }
         
